@@ -1,0 +1,125 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+.todo_title{
+    font-size: 45px;
+    text-align: center;
+    margin: 0px;
+    padding-bottom: 20px;
+}
+
+.submit_btn{
+    margin-left: 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.submit_btn:hover{
+   color: green;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+}
+
+.create_todo_wrapper{
+    border: solid green 3px;
+    margin: 0 auto 30px;
+    padding: 30px;
+    width: 75%;
+    border-radius: 5px;
+}
+
+.list_ul {
+    display: block;
+    margin: 0px auto;
+    justify-content: center;
+    border: solid green 3px;
+    width: 75%;
+    border-radius: 5px;
+}
+
+.list_li{
+    list-style: none;
+    width: 90%;
+    border: solid black 2px;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.list_ok_btn {
+    background-color: #3ebe55;
+    border-radius: 3px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.list_delete_btn {
+    background-color: #ff4a23;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.list_edit_btn{
+    margin-left: 2px;
+    background-color: #ffe212;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.list_save_btn {
+    background-color: #45ffa9;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.form_input {
+    min-height: 30px;
+    width: 500px;
+}
+
+.list_ok_task_paint {
+    background-color: #3ebe55;
+}
+
+.tabs_wrapper {
+    width: 75%;
+    border: solid green 3px;
+    display: flex;
+    margin: 0 auto;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.tabs_btn {
+    flex-grow: 1;
+    cursor: pointer;
+}
+
+.tabs_btn:hover {
+    background-color: #3ebe55;
+}
+
+.selected_tab {
+    background-color: #808080;
+}
