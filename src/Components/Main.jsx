@@ -178,7 +178,8 @@ class Main extends Component {
                       currentTab={this.state.currentTab}
                       onClickListHandler={this.onClickListHandler}
                       onChangeEditableText={this.onChangeEditableText}
-                      list={this.state.toDoList}/>
+                      list={this.state.toDoList}
+                />
             </>
         )
     }
