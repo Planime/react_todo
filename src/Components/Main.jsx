@@ -8,7 +8,7 @@ class Main extends Component {
 
 
     state = {
-        toDoList: JSON.parse(localStorage.getItem("toDoList")) || [],
+        toDoList: [],
         formInput: "Hello, my name is Hanry",
         currentTab: "all",
         editableText: "",
@@ -16,17 +16,20 @@ class Main extends Component {
     };
 
 
-    oneUnloadHandler = () => {
-        localStorage.setItem("toDoList", JSON.stringify(this.state.toDoList))
-    };
-
-
     componentDidMount() {
-        window.addEventListener("beforeunload", this.oneUnloadHandler)
+        console.log('did mount')
+        fetch("https://5fec128e573752001730b0f1.mockapi.io/todo")
+            .then(response => response.json())
+            .then(response => this.setState(
+                {
+                    toDoList: response
+                }
+            ))
+
     }
 
-    componentWillUnmount() {
-        window.removeEventListener("beforeunload", this.oneUnloadHandler)
+    componentDidUpdate(){
+        console.log('did update')
     }
 
 
@@ -39,51 +42,87 @@ class Main extends Component {
     handlerOnSubmit = (e) => {
         e.preventDefault();
 
-        this.setState((prevState) => {
-            return {
-                formInput: "",
-                toDoList: [
-                    {
-                        description: prevState.formInput,
-                        id: Math.random(),
-                        completed: false,
-                        editable: false
-                    },
-                    ...prevState.toDoList]
-            }
-        });
+        const options = {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                description: this.state.formInput,
+                completed: false
+            })
+        };
+
+        fetch("https://5fec128e573752001730b0f1.mockapi.io/todo", options)
+            .then(res => res.json())
+            .then(res => {
+                this.setState((prevState) => {
+                    return {
+                        formInput: "",
+                        toDoList: [
+                            res,
+                            ...prevState.toDoList]
+                    }
+                });
+            });
+
 
     };
 
     deleteBtnHandler = (target) => {
-        this.setState((prevState) => {
-            return {
-                toDoList: prevState.toDoList.filter((task) => task.id !== +target.dataset.id)
-            }
-        })
+        const options = {
+            method: "DELETE"
+        };
+        fetch(`https://5fec128e573752001730b0f1.mockapi.io/todo/${target.dataset.id}`, options)
+            .then(res => res.json())
+            .then(res => {
+                this.setState((prevState) => {
+                    return {
+                        toDoList: prevState.toDoList.filter((task) => {
+                            return task.id !== res.id
+                        })
+                    }
+                })
+            })
+            .catch((error) => console.error(error))
+
     };
 
     okBtnHandler = (target) => {
-        this.setState((prevState) => {
-            return {
-                toDoList: prevState.toDoList.map(({id, description, completed, editable}) => {
-                    if (id === +target.dataset.id) {
-                        return {
-                            id,
-                            description,
-                            completed: !completed,
-                            editable
-                        }
-                    }
+
+        let currentTask = this.state.toDoList.find((task) => task.id === target.dataset.id);
+
+        const options = {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                completed: !currentTask.completed
+            })
+        };
+
+        fetch(`https://5fec128e573752001730b0f1.mockapi.io/todo/${target.dataset.id}`, options)
+            .then(res => res.json())
+            .then(res => {
+                this.setState((prevState) => {
                     return {
-                        id,
-                        description,
-                        completed,
-                        editable
+                        toDoList: prevState.toDoList.map(({id, description, completed}) => {
+                            if (id === res.id) {
+                                return {
+                                    id,
+                                    description,
+                                    completed: !completed,
+                                }
+                            }
+                            return {
+                                id,
+                                description,
+                                completed,
+                            }
+                        })
                     }
                 })
-            }
-        })
+            })
+            .catch((error) => console.error(error))
+
+
     };
 
 
@@ -91,13 +130,24 @@ class Main extends Component {
 
         this.setState({
             editableTaskId: target.dataset.id,
-            editableText: this.state.toDoList.find((task) => task.id === +(target.dataset.id)).description
+            editableText: this.state.toDoList.find((task) => task.id === target.dataset.id).description
         })
 
     };
 
 
     saveBtnHandler = (target) => {
+
+        const options = {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                description: this.state.editableText
+            })
+        };
+
+        fetch(`https://5fec128e573752001730b0f1.mockapi.io/todo/${target.dataset.id}`, options);
+
         this.setState((prevState) => {
             return {
                 editableTaskId: null,
@@ -116,7 +166,6 @@ class Main extends Component {
             }
 
         })
-
 
 
     };
